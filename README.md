@@ -1,20 +1,44 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# HNUE Grade Simulator
 
-# Run and deploy your AI Studio app
+Ứng dụng mô phỏng bảng điểm và tính CPA dự kiến cho sinh viên HNUE.
 
-This contains everything you need to run your app locally.
+## Cài đặt và Chạy (Local)
 
-View your app in AI Studio: https://ai.studio/apps/drive/1eZQMp8kj4INJb3iJzlsxX5ugNbxwiHc4
+1.  Cài đặt dependencies:
+    ```bash
+    npm install
+    ```
 
-## Run Locally
+2.  Chạy server development:
+    ```bash
+    npm run dev
+    ```
 
-**Prerequisites:**  Node.js
+## Deploy lên Vercel
 
+Dự án này được cấu hình để deploy dễ dàng lên Vercel sử dụng Vite.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1.  Đẩy code lên GitHub.
+2.  Tạo project mới trên Vercel và import repository này.
+3.  Vercel sẽ tự động nhận diện `Vite` framework.
+4.  Cài đặt mặc định của Vercel (`Build Command: vite build`, `Output Directory: dist`) là chính xác.
+
+## Cấu trúc thư mục
+
+Dự án sử dụng cấu trúc chuẩn của Vite + React:
+
+```
+/
+├── index.html
+├── package.json
+├── vite.config.ts
+├── tsconfig.json
+└── src/
+    ├── main.tsx
+    ├── App.tsx
+    ├── types.ts
+    ├── components/
+    └── services/
+```
+
+**LƯU Ý QUAN TRỌNG:** Nếu bạn thấy các file code (`.tsx`, `.ts`) nằm trực tiếp ở thư mục gốc (root) thay vì trong `src/`, vui lòng **XÓA CHÚNG** để tránh gây lỗi khi build. Chỉ giữ lại code trong thư mục `src/`.

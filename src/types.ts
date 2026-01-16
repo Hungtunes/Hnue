@@ -21,23 +21,23 @@ export interface MarkSubject {
   StudyUnitID: string;
   CurriculumID: string;
   CurriculumName: string;
-  Credits: string; 
-  DiemTK_10: string;
-  DiemTK_4: string;
-  DiemTK_Chu: string;
-  NamHoc: string; 
-  HocKy: string; 
-  NotComputeAverageScore: boolean; 
-  IsPass: string | null; 
+  Credits: string; // API returns string number
+  DiemTK_10: string | null;
+  DiemTK_4: string | null;
+  DiemTK_Chu: string | null;
+  NamHoc: string; // "1", "2" etc represents year index within course
+  HocKy: string; // "1", "2"
+  NotComputeAverageScore: boolean; // Important for CPA
+  IsPass: string | null; // "1" is pass
 }
 
 export interface SemesterMarks {
-  HocKy: string; 
+  HocKy: string; // e.g., "HK01"
   DanhSachDiemHK: MarkSubject[];
 }
 
 export interface YearMarks {
-  NamHoc: string; 
+  NamHoc: string; // e.g., "2024-2025"
   DanhSachDiem: SemesterMarks[];
 }
 
