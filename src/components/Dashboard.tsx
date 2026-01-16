@@ -15,8 +15,7 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer,
-  ReferenceLine
+  ResponsiveContainer
 } from 'recharts';
 import { LogOut, BookOpen, Calculator, RefreshCw, Trophy, TrendingUp } from 'lucide-react';
 
@@ -78,15 +77,19 @@ const Dashboard: React.FC<DashboardProps> = ({ session, onLogout }) => {
     let totalCredits = 0;
 
     allSubjects.forEach(subj => {
-      if (subj.NotComputeAverageScore) return; // Skip excluded subjects (Phys Ed, Defense)
-      
       const credits = parseFloat(subj.Credits);
       if (isNaN(credits) || credits <= 0) return;
 
       let grade = -1; // -1 indicates no valid grade found
+      const isSimulated = simulated[subj.StudyUnitID] !== undefined;
+
+      // Logic:
+      // If it's NOT computed in average score (API flag), we usually skip it.
+      // BUT, if the user explicitly simulates a grade for it, we include it (Projected CPA).
+      if (subj.NotComputeAverageScore && !isSimulated) return;
 
       // Check simulated first
-      if (simulated[subj.StudyUnitID] !== undefined) {
+      if (isSimulated) {
         grade = simulated[subj.StudyUnitID];
       } else {
         // Check original
@@ -133,11 +136,16 @@ const Dashboard: React.FC<DashboardProps> = ({ session, onLogout }) => {
     GRADE_OPTIONS.forEach(opt => dist[opt.label] = 0);
 
     allSubjects.forEach(subj => {
-        if (subj.NotComputeAverageScore) return;
+        // Same logic as CPA calc for filtering
+        const credits = parseFloat(subj.Credits);
+        if (isNaN(credits) || credits <= 0) return;
+        
+        const isSimulated = simulatedMarks[subj.StudyUnitID] !== undefined;
+        if (subj.NotComputeAverageScore && !isSimulated) return;
         
         let grade = -1;
         
-        if (simulatedMarks[subj.StudyUnitID] !== undefined) {
+        if (isSimulated) {
             grade = simulatedMarks[subj.StudyUnitID];
         } else if (subj.DiemTK_4 && subj.DiemTK_4.trim() !== '') {
             grade = parseFloat(subj.DiemTK_4);

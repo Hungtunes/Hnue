@@ -1,6 +1,6 @@
 import React from 'react';
 import { MarkSubject, GRADE_OPTIONS } from '../types';
-import { Calculator, Award, AlertCircle } from 'lucide-react';
+import { Calculator, AlertCircle } from 'lucide-react';
 
 interface SubjectCardProps {
   subject: MarkSubject;
@@ -16,10 +16,12 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject, simulatedGrade, onGr
   const currentGrade = simulatedGrade !== undefined ? simulatedGrade : originalGrade4;
   
   // Determine if grade is simulated
-  // It is simulated if user has set a value AND (either no original grade OR value differs from original)
   const isSimulated = simulatedGrade !== undefined && (hasOriginalGrade ? Math.abs(simulatedGrade - originalGrade4) > 0.01 : true);
   
   const isExcluded = subject.NotComputeAverageScore;
+  // Allow grading if user has credits > 0, even if currently excluded (likely ungraded)
+  const credits = parseFloat(subject.Credits);
+  const canBeGraded = credits > 0 || !isExcluded;
 
   // Find label for current grade
   const currentGradeLabel = GRADE_OPTIONS.find(g => Math.abs(g.value - currentGrade) < 0.1)?.label || 'F';
@@ -70,7 +72,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject, simulatedGrade, onGr
                     {subject.CurriculumName}
                 </h3>
                 {isExcluded && (
-                     <span title="Không tính vào điểm trung bình" className="text-gray-400">
+                     <span title="Hiện không tính vào điểm trung bình (trên hệ thống)" className="text-gray-400">
                          <AlertCircle size={14} />
                      </span>
                 )}
@@ -88,7 +90,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject, simulatedGrade, onGr
       </div>
 
       {/* Grade Control */}
-      {!isExcluded && (
+      {canBeGraded ? (
         <div className="mt-4 pt-4 border-t border-gray-100">
             <div className="flex items-end justify-between mb-2">
                 <span className="text-xs font-medium text-gray-600">
@@ -123,9 +125,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject, simulatedGrade, onGr
                 ))}
             </div>
         </div>
-      )}
-
-      {isExcluded && (
+      ) : (
           <div className="mt-4 pt-2 border-t border-gray-100 text-xs text-gray-400 italic text-center">
               Môn học không tính vào điểm trung bình
           </div>
