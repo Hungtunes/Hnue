@@ -16,6 +16,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject, simulatedGrade, onGr
   const currentGrade = simulatedGrade !== undefined ? simulatedGrade : originalGrade4;
   
   // Determine if grade is simulated
+  // It is simulated if user has set a value AND (either no original grade OR value differs from original)
   const isSimulated = simulatedGrade !== undefined && (hasOriginalGrade ? Math.abs(simulatedGrade - originalGrade4) > 0.01 : true);
   
   const isExcluded = subject.NotComputeAverageScore;
@@ -43,12 +44,6 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject, simulatedGrade, onGr
 
   // Original color is gray if not exists
   const originalColor = hasOriginalGrade ? getGradeColor(originalGrade4) : 'text-gray-300';
-
-  // Handle slider change
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
-    onGradeChange(subject.StudyUnitID, value);
-  };
 
   // Find slider index
   const sliderIndex = GRADE_OPTIONS.findIndex(g => Math.abs(g.value - currentGrade) < 0.1);
