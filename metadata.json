@@ -1,0 +1,5 @@
+{
+  "name": "HNUE Grade Simulator",
+  "description": "A student portal dashboard for HNUE to view transcripts, simulate grade improvements, and calculate CPA dynamically.",
+  "requestFramePermissions": []
+}
